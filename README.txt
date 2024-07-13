@@ -9,3 +9,5 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/RenegadeAsturias/KotlinIntermedio2024.git
 git push -u origin main
+
+git commit -m "Proyecto Kotlin Intermedio 2024 - Enum Classes"
