@@ -1,5 +1,7 @@
 package com.renegade.kotlinintermedio
 
+import kotlin.concurrent.thread
+
 class KotlingIntermedioLambdas {
 
     // Lambdas
@@ -45,9 +47,65 @@ private fun lambdas() {
 
     println("SUMAR="+operarConNumeros(5, 10, mySumFun2))
     println("MULTIPLICAR="+operarConNumeros(5, 10, myMultFun2))
+
+
+    // Ahora a nuestra función : operarConNumeros
+    // en lugar de pasarle una función como parámetro (por ejemplo: mySumFun2, myMultFun2)
+    // vamos a definir la IMPLEMENTACIÓN de la función en la propia llamada:
+    // pasamos los valores de la llamada en la propia Lambda y restamos. No hace falta return
+    operarConNumeros(5 , 10) { x, y ->
+        x - y
+    }
+
+    // Como es una función básica, la minimizamos en una sola línea
+    // y tenemos la implementación de la lambda en la propia llamada
+    operarConNumeros(5 , 10) { x, y -> x - y}
+    println(operarConNumeros(5 , 10) { x, y -> x - y})
+
+    // Otro úso típo de las lambdas es para definir funciones de tipo callback
+    // funciones con una ejecución asíncrona (no sabemos cuando nos va a devolver un resultado)
+    // por ejemplo la llamada a un servicio web
+    // o también para un evento clic en un botón que no sabemos cuando se va a realizar
+    // Creo la función: myAsyncFun
+
+    // Como solo tiene un parámetro, puedo utilizar 'it'
+    myAsyncFun("Jesús", { println("NOMBRE="+it) })
+
+    myAsyncFun("Jesús", { name ->
+        println(name)
+        println(name)
+    }
+    )
+
+    // Ulitilizando asincronía
+    myAsyncFun2("Pedro", { println("NOMBRE2="+it) })
+
+    myAsyncFun2("Pedro", { name ->
+        println(name)
+        println(name)
+    }
+    )
+
 }
 
-private fun operarConNumeros(x:Int, y:Int, myFun:(Int, Int)->Int): Int{
+private fun operarConNumeros(x:Int, y:Int, myFun:(Int, Int) -> Int): Int{
     return  myFun(x, y)
 }
 
+private fun myAsyncFun(name: String, hello:(String) -> Unit) {
+    val myNewString = "Hola $name"
+    hello(name)
+}
+
+// Utilizando asincrónía
+private fun myAsyncFun2(name: String, hello:(String) -> Unit) {
+    val myNewString = "Hola $name"
+    thread {
+        Thread.sleep(5000)
+        hello("[5000ms]"+name)
+    }
+    thread {
+        Thread.sleep(3000)
+        hello("[3000ms]"+name)
+    }
+}
